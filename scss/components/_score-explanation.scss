@@ -1,0 +1,32 @@
+// Raisons affichées sous le score de recommandation.
+
+@use "../abstracts/variables" as v;
+
+.score-explanation {
+  margin-top: v.$space-sm;
+  color: v.$color-explanation;
+  font-size: v.$font-size-sm;
+  line-height: 1.4;
+
+  &__title {
+    margin-bottom: v.$space-xs;
+    color: v.$color-text-muted;
+    font-weight: 600;
+  }
+
+  &__list {
+    display: grid;
+    gap: 2px;
+    list-style: none;
+  }
+
+  &__item {
+    display: flex;
+    gap: v.$space-xs;
+
+    span {
+      color: v.$color-accent;
+      font-weight: 700;
+    }
+  }
+}

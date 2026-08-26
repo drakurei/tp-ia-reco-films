@@ -7,6 +7,20 @@
  */
 
 /**
+ * Pondérations par défaut, utilisées quand l'utilisateur n'en a pas encore
+ * choisi (sliders de la fonctionnalité de pondération configurable).
+ *
+ * Exportées pour que les autres modules qui ont besoin des mêmes valeurs par
+ * défaut (ex. js/core/explanation.js) ne les recopient pas séparément.
+ */
+export const DEFAULT_WEIGHTS = {
+  rating: 0.4,
+  popularity: 0.2,
+  recency: 0.2,
+  votes: 0.2,
+};
+
+/**
  * Calcule la valeur normalisée de la note moyenne.
  *
  * TMDB fournit une note comprise entre 0 et 10, donc une division
@@ -15,7 +29,7 @@
  * @param {number} rating - Note moyenne TMDB.
  * @returns {number} Note normalisée entre 0 et 1.
  */
-function normalizeRating(rating) {
+export function normalizeRating(rating) {
   const value = Number(rating);
 
   if (!Number.isFinite(value)) {
@@ -38,7 +52,7 @@ function normalizeRating(rating) {
  * @param {number} popularity - Popularité TMDB.
  * @returns {number} Popularité normalisée entre 0 et 1.
  */
-function normalizePopularity(popularity) {
+export function normalizePopularity(popularity) {
   const value = Number(popularity);
 
   if (!Number.isFinite(value) || value <= 0) {
@@ -65,7 +79,7 @@ function normalizePopularity(popularity) {
  * @param {number} voteCount - Nombre de votes TMDB.
  * @returns {number} Nombre de votes normalisé entre 0 et 1.
  */
-function normalizeVotes(voteCount) {
+export function normalizeVotes(voteCount) {
   const value = Number(voteCount);
 
   if (!Number.isFinite(value) || value <= 0) {
@@ -91,7 +105,7 @@ function normalizeVotes(voteCount) {
  * @param {string} releaseDate - Date de sortie au format YYYY-MM-DD.
  * @returns {number} Récence normalisée entre 0 et 1.
  */
-function normalizeRecency(releaseDate) {
+export function normalizeRecency(releaseDate) {
   if (!releaseDate) {
     return 0;
   }
@@ -136,20 +150,12 @@ function normalizeRecency(releaseDate) {
  * @param {number} [weights.votes=0.2] - Poids du nombre de votes.
  * @returns {number} Score compris entre 0 et 100.
  */
-export function computeScore(
-  movie,
-  weights = {
-    rating: 0.4,
-    popularity: 0.2,
-    recency: 0.2,
-    votes: 0.2,
-  }
-) {
+export function computeScore(movie, weights = DEFAULT_WEIGHTS) {
   const normalizedWeights = {
-    rating: Number(weights.rating ?? 0.4),
-    popularity: Number(weights.popularity ?? 0.2),
-    recency: Number(weights.recency ?? 0.2),
-    votes: Number(weights.votes ?? 0.2),
+    rating: Number(weights.rating ?? DEFAULT_WEIGHTS.rating),
+    popularity: Number(weights.popularity ?? DEFAULT_WEIGHTS.popularity),
+    recency: Number(weights.recency ?? DEFAULT_WEIGHTS.recency),
+    votes: Number(weights.votes ?? DEFAULT_WEIGHTS.votes),
   };
 
   const totalWeight =
