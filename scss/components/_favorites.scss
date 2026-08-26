@@ -1,0 +1,11 @@
+// Bouton favori et boutons de retrait de la page « Mes recommandations ».
+//
+// Classes à styler :
+// - .favorite-button           bouton principal sur la page de détail d'un film
+// - .favorite-button.is-active état quand le film est déjà en favori (fond accent, texte sombre)
+// - .favorites-remove          petit bouton "Retirer" affiché sous chaque carte de la page favoris
+//
+// Utiliser les variables du projet (v.$color-accent, v.$space-sm, v.$radius-sm,
+// v.$transition...) plutôt que des valeurs en dur.
+
+@use "../abstracts/variables" as v;
