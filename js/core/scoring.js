@@ -78,10 +78,14 @@ function normalizeVotes(voteCount) {
 }
 
 /**
- * Calcule la récence d'un film.
+ * Normalise la récence d'un film avec une décroissance exponentielle.
  *
- * Un film récent obtient une valeur proche de 1 tandis qu'un film
- * ancien obtient progressivement une valeur proche de 0.
+ * Une demi-vie de 5 ans signifie qu'un film perd la moitié de sa valeur de
+ * récence tous les 5 ans : 1.00 à la sortie, 0.50 à 5 ans, 0.25 à 10 ans,
+ * 0.06 à 20 ans. Contrairement à une décroissance linéaire, cette méthode ne
+ * met jamais brutalement la récence à zéro — un film de 11 ans et un film de
+ * 30 ans ne sont plus traités de façon identique.
+ *
  * Une absence de date est considérée comme une récence nulle.
  *
  * @param {string} releaseDate - Date de sortie au format YYYY-MM-DD.
@@ -98,13 +102,14 @@ function normalizeRecency(releaseDate) {
     return 0;
   }
 
-  const now = Date.now();
-  const ageInDays = Math.max(0, (now - releaseTimestamp) / (1000 * 60 * 60 * 24));
+  const ageInDays = Math.max(
+    0,
+    (Date.now() - releaseTimestamp) / (1000 * 60 * 60 * 24)
+  );
 
-  // Après 10 ans, l'effet de la récence devient nul.
-  const maxAgeInDays = 3650;
+  const halfLifeInDays = 365.25 * 5;
 
-  return Math.max(0, 1 - ageInDays / maxAgeInDays);
+  return Math.pow(0.5, ageInDays / halfLifeInDays);
 }
 
 /**
