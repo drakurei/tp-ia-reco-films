@@ -7,7 +7,8 @@
 
 import { discoverMovies, TmdbError } from "../api/tmdb.js";
 import { getOutlet } from "../core/router.js";
-import { setState } from "../core/state.js";
+import { getState, setState } from "../core/state.js";
+import { computeScore, sortByScore } from "../core/scoring.js";
 import { movieGrid } from "../ui/movieCard.js";
 import { emptyMessage, errorMessage, loader } from "../ui/feedback.js";
 
@@ -18,8 +19,8 @@ function layout(content) {
       <div class="view__header">
         <h1 class="view__title">Découvrir des films</h1>
         <p class="view__subtitle">
-          Les films du moment, classés par popularité. Affinez la sélection
-          pour obtenir des recommandations à votre goût.
+          Les films du moment, classés par score de recommandation. Affinez la
+          sélection pour obtenir des recommandations à votre goût.
         </p>
       </div>
 
@@ -28,6 +29,21 @@ function layout(content) {
 
       <div class="view__content" id="home-content">${content}</div>
     </section>
+  `;
+}
+
+/**
+ * Badge de score affiché sous chaque carte.
+ *
+ * @param {number} score
+ * @returns {string}
+ */
+function scoreBadge(score) {
+  return `
+    <span class="movie-card__score" title="Score de recommandation calculé à partir de vos pondérations">
+      <span class="movie-card__score-label">Score</span>
+      ${score.toFixed(1)}/100
+    </span>
   `;
 }
 
@@ -40,11 +56,18 @@ export async function homeView() {
 
   try {
     const movies = await discoverMovies({ sort_by: "popularity.desc" });
-    setState({ movies, loading: false });
+    const { weights } = getState();
+
+    // On stocke la liste déjà triée : les autres fonctionnalités qui liront
+    // state.movies verront le même ordre que celui affiché.
+    const sortedMovies = sortByScore(movies, weights);
+    setState({ movies: sortedMovies, loading: false });
 
     const content = document.getElementById("home-content");
-    content.innerHTML = movies.length
-      ? movieGrid(movies)
+    content.innerHTML = sortedMovies.length
+      ? movieGrid(sortedMovies, {
+          extra: (movie) => scoreBadge(computeScore(movie, weights)),
+        })
       : emptyMessage(
           "Aucun film trouvé",
           "Essayez d'élargir vos critères de recherche."

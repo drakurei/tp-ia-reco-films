@@ -1,0 +1,30 @@
+// Badge de score affiché sur la carte de film.
+
+@use "../abstracts/variables" as v;
+
+.movie-card {
+  &__score {
+    display: inline-flex;
+    align-items: baseline;
+    gap: v.$space-xs;
+    padding: v.$space-xs v.$space-sm;
+    border-radius: v.$radius-sm;
+    // Fond accentué et texte sombre : le blanc sur or ne passe pas le
+    // contraste minimum.
+    background-color: v.$color-accent;
+    color: v.$color-bg;
+    font-size: v.$font-size-sm;
+    font-weight: 700;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  // La carte affiche déjà la note TMDB sur l'affiche : le libellé évite
+  // de confondre les deux chiffres.
+  &__score-label {
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    opacity: 0.7;
+  }
+}

@@ -18,12 +18,20 @@ const state = {
     minRating: "",
     language: "",
   },
-  /** Pondérations du score — alimentées par la fonctionnalité de sliders. */
+  /**
+   * Pondérations du score — alimentées par la fonctionnalité de sliders.
+   *
+   * La note pèse plus lourd que les trois autres critères : à pondération
+   * égale, la récence pénalise trop fortement les films anciens, au point de
+   * classer un film moyen mais récent devant un classique très bien noté.
+   * Ces valeurs ne sont que le point de départ, l'utilisateur pourra les
+   * modifier.
+   */
   weights: {
-    rating: 1,
-    popularity: 1,
-    recency: 1,
-    votes: 1,
+    rating: 0.4,
+    popularity: 0.2,
+    recency: 0.2,
+    votes: 0.2,
   },
   /** Ids des films mis en favori — alimentés par la fonctionnalité favoris. */
   favorites: [],
