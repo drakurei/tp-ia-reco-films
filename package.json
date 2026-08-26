@@ -1,0 +1,16 @@
+{
+  "name": "tp-ia-reco-films",
+  "version": "0.1.0",
+  "description": "Mini moteur de recommandation de films basé sur l'API TMDB",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "sass": "sass scss/main.scss css/main.css",
+    "sass:watch": "sass --watch scss/main.scss css/main.css",
+    "dev": "npx --yes serve . -l 3000",
+    "build": "npm run sass"
+  },
+  "devDependencies": {
+    "sass": "^1.99.0"
+  }
+}

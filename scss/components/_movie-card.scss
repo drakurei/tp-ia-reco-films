@@ -1,0 +1,93 @@
+// Carte de film et grille.
+
+@use "../abstracts/variables" as v;
+@use "../abstracts/mixins" as m;
+
+.movie-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: v.$space-lg;
+
+  @include m.from(v.$breakpoint-md) {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  }
+}
+
+.movie-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid v.$color-border;
+  border-radius: v.$radius-md;
+  background-color: v.$color-surface;
+  transition: transform v.$transition, border-color v.$transition;
+
+  &:hover {
+    transform: translateY(-4px);
+    border-color: rgba(240, 180, 41, 0.4);
+  }
+
+  &__link {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+  }
+
+  &__poster {
+    position: relative;
+    aspect-ratio: 2 / 3;
+    background-color: v.$color-surface-hover;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &__poster-fallback {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    font-size: 2rem;
+    opacity: 0.3;
+  }
+
+  &__rating {
+    position: absolute;
+    top: v.$space-sm;
+    right: v.$space-sm;
+    padding: 2px v.$space-sm;
+    border-radius: v.$radius-sm;
+    background-color: rgba(10, 11, 15, 0.85);
+    color: v.$color-accent;
+    font-size: v.$font-size-sm;
+    font-weight: 700;
+  }
+
+  &__body {
+    padding: v.$space-md;
+  }
+
+  &__title {
+    @include m.line-clamp(2);
+
+    font-size: v.$font-size-base;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  &__meta {
+    display: flex;
+    gap: v.$space-xs;
+    margin-top: v.$space-xs;
+    color: v.$color-text-muted;
+    font-size: v.$font-size-sm;
+  }
+
+  // Emplacement pour les ajouts de la phase 2 (favori, score, comparaison).
+  &__extra {
+    padding: 0 v.$space-md v.$space-md;
+  }
+}

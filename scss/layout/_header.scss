@@ -1,0 +1,91 @@
+// En-tête et navigation principale.
+
+@use "../abstracts/variables" as v;
+@use "../abstracts/mixins" as m;
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: rgba(10, 11, 15, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid v.$color-border;
+
+  &__inner {
+    @include m.container;
+
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: v.$space-md;
+    padding-block: v.$space-md;
+  }
+
+  &__brand {
+    display: flex;
+    align-items: center;
+    gap: v.$space-sm;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  &__brand-mark {
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: v.$radius-sm;
+    background-color: v.$color-accent;
+    color: v.$color-bg;
+    font-size: v.$font-size-sm;
+    font-weight: 800;
+  }
+
+  &__brand-name {
+    font-size: v.$font-size-lg;
+  }
+}
+
+.nav {
+  display: flex;
+  gap: v.$space-xs;
+
+  &__link {
+    padding: v.$space-xs v.$space-md;
+    border-radius: v.$radius-sm;
+    color: v.$color-text-muted;
+    font-size: v.$font-size-sm;
+    font-weight: 500;
+    transition: color v.$transition, background-color v.$transition;
+
+    &:hover {
+      color: v.$color-text;
+      background-color: v.$color-surface;
+    }
+
+    &.is-active {
+      color: v.$color-accent;
+      background-color: v.$color-surface;
+    }
+  }
+}
+
+.footer {
+  @include m.container;
+
+  margin-top: auto;
+  padding-block: v.$space-xl;
+  border-top: 1px solid v.$color-border;
+  color: v.$color-text-muted;
+  font-size: v.$font-size-sm;
+  text-align: center;
+
+  a {
+    color: v.$color-accent;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
