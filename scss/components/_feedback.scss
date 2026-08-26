@@ -1,0 +1,49 @@
+// Messages de chargement, d'état vide et d'erreur.
+
+@use "../abstracts/variables" as v;
+
+.feedback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: v.$space-md;
+  padding: v.$space-xxl v.$space-lg;
+  border: 1px dashed v.$color-border;
+  border-radius: v.$radius-md;
+  text-align: center;
+
+  &__title {
+    font-size: v.$font-size-lg;
+    font-weight: 600;
+  }
+
+  &__text {
+    max-width: 50ch;
+    color: v.$color-text-muted;
+  }
+
+  &--error {
+    border-style: solid;
+    border-color: rgba(242, 99, 95, 0.4);
+    background-color: rgba(242, 99, 95, 0.06);
+
+    .feedback__title {
+      color: v.$color-danger;
+    }
+  }
+}
+
+.loader {
+  width: 2rem;
+  height: 2rem;
+  border: 3px solid v.$color-border;
+  border-top-color: v.$color-accent;
+  border-radius: 50%;
+  animation: spin 800ms linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

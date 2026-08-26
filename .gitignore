@@ -16,3 +16,6 @@ desktop.ini
 # Éditeurs
 .vscode/
 .idea/
+
+# Config locale de l'agent Claude Code
+.claude/

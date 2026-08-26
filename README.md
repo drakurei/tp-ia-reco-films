@@ -19,19 +19,62 @@ Projet réalisé en binôme, avec comparaison de quatre outils IA de développem
    git clone <url-du-repo>
    ```
 
-2. Créer sa clé API TMDB sur https://www.themoviedb.org/settings/api
+2. Installer les dépendances de développement (Sass) :
 
-3. Copier le fichier de configuration d'exemple et y renseigner sa clé :
+   ```bash
+   npm install
+   ```
+
+3. Créer sa clé API TMDB sur https://www.themoviedb.org/settings/api
+   (onglet « API Key », version 3).
+
+4. Copier le fichier de configuration d'exemple et y renseigner sa clé :
 
    ```bash
    cp js/config.example.js js/config.js
    ```
 
    `js/config.js` est ignoré par Git : la clé ne doit jamais être commitée.
+   Sans ce fichier, l'application démarre quand même et affiche un message
+   d'installation.
+
+5. Compiler les styles puis lancer le serveur de développement :
+
+   ```bash
+   npm run sass
+   ```
+
+   ```bash
+   npm run dev
+   ```
+
+   L'application est disponible sur http://localhost:3000.
+   Pendant le développement, `npm run sass:watch` recompile à chaque
+   modification d'un fichier `.scss`.
+
+> Un serveur est nécessaire : le projet utilise les modules ES, qui sont
+> bloqués si l'on ouvre `index.html` directement en `file://`.
 
 > Note : en application front-end pure, la clé reste visible dans les requêtes
 > réseau du navigateur. En production, il faudrait passer par un proxy back-end
 > qui garde la clé côté serveur.
+
+## Structure
+
+```
+index.html          Point d'entrée HTML
+scss/               Sources Sass (abstracts, base, layout, components, views)
+css/                CSS compilé (généré, non versionné)
+js/
+  constants.js      URLs publiques de l'API TMDB
+  config.js         Clé API (non versionné)
+  api/tmdb.js       Couche d'accès à l'API
+  core/state.js     État global observable
+  core/router.js    Routeur par hash
+  ui/               Composants d'affichage réutilisables
+  views/            Une fonction par page
+  main.js           Démarrage et déclaration des routes
+```
 
 ## Workflow Git (Gitflow)
 

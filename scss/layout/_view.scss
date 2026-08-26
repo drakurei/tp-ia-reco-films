@@ -1,0 +1,54 @@
+// Gabarit commun à toutes les vues.
+
+@use "../abstracts/variables" as v;
+@use "../abstracts/mixins" as m;
+
+.main {
+  @include m.container;
+
+  flex: 1;
+  padding-block: v.$space-xl v.$space-xxl;
+}
+
+.view {
+  &__header {
+    margin-bottom: v.$space-xl;
+  }
+
+  &__title {
+    font-size: v.$font-size-xl;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+
+    @include m.from(v.$breakpoint-md) {
+      font-size: v.$font-size-xxl;
+    }
+  }
+
+  &__subtitle {
+    max-width: 60ch;
+    margin-top: v.$space-sm;
+    color: v.$color-text-muted;
+  }
+
+  // Zone destinée aux filtres et réglages ajoutés en phase 2.
+  &__controls:not(:empty) {
+    margin-bottom: v.$space-xl;
+    padding: v.$space-lg;
+    border: 1px solid v.$color-border;
+    border-radius: v.$radius-md;
+    background-color: v.$color-surface;
+  }
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: v.$space-lg;
+  color: v.$color-text-muted;
+  font-size: v.$font-size-sm;
+  transition: color v.$transition;
+
+  &:hover {
+    color: v.$color-accent;
+  }
+}
