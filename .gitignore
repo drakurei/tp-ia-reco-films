@@ -4,9 +4,6 @@ js/config.js
 # Dépendances
 node_modules/
 
-# Build SASS
-css/*.css
-css/*.css.map
 
 # Système
 .DS_Store
