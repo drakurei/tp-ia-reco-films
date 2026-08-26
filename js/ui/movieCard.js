@@ -59,14 +59,29 @@ export function movieCard(movie, { extra = "" } = {}) {
 /**
  * Grille de cartes de films.
  *
+ * `options.extra` accepte soit une chaîne de HTML, identique pour toutes les
+ * cartes, soit une fonction `(movie) => string` évaluée pour chaque film. La
+ * seconde forme permet à une fonctionnalité d'afficher une valeur propre à
+ * chaque carte (score, état de favori, case de comparaison).
+ *
  * @param {Array<Object>} movies
  * @param {Object} [options] - Options passées à chaque carte
+ * @param {string|((movie: Object) => string)} [options.extra]
  * @returns {string}
  */
 export function movieGrid(movies, options = {}) {
   return `
     <div class="movie-grid">
-      ${movies.map((movie) => movieCard(movie, options)).join("")}
+      ${movies
+        .map((movie) => {
+          const extra =
+            typeof options.extra === "function"
+              ? options.extra(movie)
+              : options.extra ?? "";
+
+          return movieCard(movie, { ...options, extra });
+        })
+        .join("")}
     </div>
   `;
 }
