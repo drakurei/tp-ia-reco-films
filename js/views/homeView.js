@@ -7,9 +7,11 @@
 
 import { discoverMovies, TmdbError } from "../api/tmdb.js";
 import { getOutlet } from "../core/router.js";
-import { getState, setState } from "../core/state.js";
+import { getState, setState, subscribe } from "../core/state.js";
 import { computeScore, sortByScore } from "../core/scoring.js";
+import { buildDiscoverParams, EMPTY_FILTERS, hasActiveFilters } from "../core/filters.js";
 import { movieGrid } from "../ui/movieCard.js";
+import { filtersPanel, initFiltersPanel } from "../ui/filters.js";
 import { emptyMessage, errorMessage, loader } from "../ui/feedback.js";
 
 /** Structure de la vue, indépendante des données. */
@@ -47,30 +49,34 @@ function scoreBadge(score) {
   `;
 }
 
-/** Affiche la vue d'accueil et charge les films. */
-export async function homeView() {
-  const outlet = getOutlet();
-  outlet.innerHTML = layout(loader());
+/**
+ * Interroge TMDB avec les filtres actifs, trie par score et affiche le
+ * résultat dans la grille.
+ */
+async function loadMovies() {
+  const content = document.getElementById("home-content");
+  content.innerHTML = loader();
 
+  const { filters, weights } = getState();
   setState({ loading: true, error: null });
 
   try {
-    const movies = await discoverMovies({ sort_by: "popularity.desc" });
-    const { weights } = getState();
+    const movies = await discoverMovies(buildDiscoverParams(filters));
 
     // On stocke la liste déjà triée : les autres fonctionnalités qui liront
     // state.movies verront le même ordre que celui affiché.
     const sortedMovies = sortByScore(movies, weights);
     setState({ movies: sortedMovies, loading: false });
 
-    const content = document.getElementById("home-content");
     content.innerHTML = sortedMovies.length
       ? movieGrid(sortedMovies, {
           extra: (movie) => scoreBadge(computeScore(movie, weights)),
         })
       : emptyMessage(
           "Aucun film trouvé",
-          "Essayez d'élargir vos critères de recherche."
+          hasActiveFilters(filters)
+            ? "Aucun film ne correspond à ces critères. Essayez d'élargir votre sélection."
+            : "Essayez d'élargir vos critères de recherche."
         );
   } catch (error) {
     const message =
@@ -79,6 +85,57 @@ export async function homeView() {
         : "Erreur inattendue lors du chargement des films.";
 
     setState({ loading: false, error: message });
-    document.getElementById("home-content").innerHTML = errorMessage(message);
+    content.innerHTML = errorMessage(message);
   }
+}
+
+/**
+ * Affiche (ou régénère) le panneau de filtres et câble ses événements.
+ *
+ * Régénérer tout le panneau à chaque changement est plus simple que de
+ * mettre à jour un `<select>` existant, et son coût est négligeable vu le
+ * nombre de champs.
+ */
+function renderFilters() {
+  const controls = document.getElementById("home-controls");
+  const { genres, filters } = getState();
+
+  controls.innerHTML = filtersPanel({ genres, filters });
+  initFiltersPanel(controls, {
+    onChange: (nextFilters) => {
+      setState({ filters: nextFilters });
+      loadMovies();
+    },
+    onReset: () => {
+      setState({ filters: { ...EMPTY_FILTERS } });
+      loadMovies();
+    },
+  });
+}
+
+/** Abonnement courant aux genres, pour régénérer le panneau à leur arrivée. */
+let unsubscribeGenres = null;
+
+/** Affiche la vue d'accueil et charge les films. */
+export async function homeView() {
+  const outlet = getOutlet();
+  outlet.innerHTML = layout(loader());
+
+  renderFilters();
+
+  // Les genres se chargent en parallèle du reste de l'application
+  // (js/main.js) : si le panneau de filtres s'affiche avant leur arrivée,
+  // on le régénère dès qu'ils sont prêts, sans perdre les filtres déjà
+  // saisis par ailleurs. Le désabonnement précédent évite d'empiler les
+  // écouteurs si l'utilisateur revient plusieurs fois sur cette vue.
+  unsubscribeGenres?.();
+  let knownGenreCount = getState().genres.length;
+  unsubscribeGenres = subscribe((state) => {
+    if (state.genres.length !== knownGenreCount) {
+      knownGenreCount = state.genres.length;
+      renderFilters();
+    }
+  });
+
+  await loadMovies();
 }

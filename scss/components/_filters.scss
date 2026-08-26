@@ -1,0 +1,61 @@
+// Panneau de filtres multi-critères de la vue d'accueil.
+
+@use "../abstracts/variables" as v;
+@use "../abstracts/mixins" as m;
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: v.$space-lg;
+
+  &__field {
+    display: flex;
+    flex: 1 1 160px;
+    flex-direction: column;
+    gap: v.$space-xs;
+    min-width: 140px;
+
+    label {
+      color: v.$color-text-muted;
+      font-size: v.$font-size-sm;
+      font-weight: 600;
+    }
+
+    select,
+    input {
+      padding: v.$space-sm;
+      border: 1px solid v.$color-border;
+      border-radius: v.$radius-sm;
+      background-color: v.$color-bg;
+      color: v.$color-text;
+      font: inherit;
+
+      &:focus-visible {
+        @include m.focus-ring;
+      }
+    }
+  }
+
+  &__reset {
+    flex: 0 0 auto;
+    padding: v.$space-sm v.$space-md;
+    border: 1px solid v.$color-border;
+    border-radius: v.$radius-sm;
+    background: transparent;
+    color: v.$color-text-muted;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: color v.$transition, border-color v.$transition;
+
+    &:hover {
+      border-color: v.$color-accent;
+      color: v.$color-accent;
+    }
+
+    &:focus-visible {
+      @include m.focus-ring;
+    }
+  }
+}
