@@ -9,8 +9,10 @@ import { discoverMovies, TmdbError } from "../api/tmdb.js";
 import { getOutlet } from "../core/router.js";
 import { getState, setState, subscribe } from "../core/state.js";
 import { computeScore, sortByScore } from "../core/scoring.js";
+import { explainScore } from "../core/explanation.js";
 import { buildDiscoverParams, EMPTY_FILTERS, hasActiveFilters } from "../core/filters.js";
 import { movieGrid } from "../ui/movieCard.js";
+import { scoreExplanation } from "../ui/scoreExplanation.js";
 import { filtersPanel, initFiltersPanel } from "../ui/filters.js";
 import { emptyMessage, errorMessage, loader } from "../ui/feedback.js";
 
@@ -70,7 +72,9 @@ async function loadMovies() {
 
     content.innerHTML = sortedMovies.length
       ? movieGrid(sortedMovies, {
-          extra: (movie) => scoreBadge(computeScore(movie, weights)),
+          extra: (movie) =>
+            scoreBadge(computeScore(movie, weights)) +
+            scoreExplanation(explainScore(movie, weights, filters.genre)),
         })
       : emptyMessage(
           "Aucun film trouvé",

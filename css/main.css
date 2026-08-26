@@ -312,6 +312,31 @@ button {
   opacity: 0.7;
 }
 
+.score-explanation {
+  margin-top: 0.5rem;
+  color: #b8c7d9;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+.score-explanation__title {
+  margin-bottom: 0.25rem;
+  color: #9096a6;
+  font-weight: 600;
+}
+.score-explanation__list {
+  display: grid;
+  gap: 2px;
+  list-style: none;
+}
+.score-explanation__item {
+  display: flex;
+  gap: 0.25rem;
+}
+.score-explanation__item span {
+  color: #f0b429;
+  font-weight: 700;
+}
+
 .filters {
   display: flex;
   flex-wrap: wrap;
