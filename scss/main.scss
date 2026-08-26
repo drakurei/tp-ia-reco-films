@@ -1,0 +1,14 @@
+// Feuille de style principale.
+// Seul ce fichier est compilé : il assemble les partiels dans l'ordre
+// abstracts -> base -> layout -> components -> views.
+
+@use "base/reset";
+
+@use "layout/header";
+@use "layout/view";
+
+@use "components/movie-card";
+@use "components/movie-score";
+@use "components/feedback";
+
+@use "views/movie-detail";

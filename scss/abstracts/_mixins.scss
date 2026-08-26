@@ -1,0 +1,38 @@
+// Mixins réutilisables.
+
+@use "variables" as v;
+
+/// Applique des styles à partir d'une largeur d'écran donnée.
+/// @param {Length} $breakpoint
+@mixin from($breakpoint) {
+  @media (min-width: $breakpoint) {
+    @content;
+  }
+}
+
+/// Conteneur centré avec marge latérale.
+@mixin container {
+  width: 100%;
+  max-width: v.$container-width;
+  margin-inline: auto;
+  padding-inline: v.$space-md;
+
+  @include from(v.$breakpoint-md) {
+    padding-inline: v.$space-lg;
+  }
+}
+
+/// Masque un texte au-delà d'un nombre de lignes donné.
+/// @param {Number} $lines
+@mixin line-clamp($lines) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/// Contour de focus cohérent sur tous les éléments interactifs.
+@mixin focus-ring {
+  outline: 2px solid v.$color-accent;
+  outline-offset: 2px;
+}

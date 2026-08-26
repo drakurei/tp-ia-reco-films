@@ -1,0 +1,65 @@
+name: Déploiement GitHub Pages
+
+# Publie le site à chaque push sur main, et manuellement depuis l'onglet Actions.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Une seule publication à la fois ; on laisse finir celle en cours.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupérer le dépôt
+        uses: actions/checkout@v4
+
+      - name: Installer Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Installer les dépendances
+        run: npm ci
+
+      - name: Compiler les styles
+        run: npm run sass
+
+      # js/config.js est ignoré par Git : il est reconstruit ici à partir du
+      # secret du dépôt, pour que la clé ne figure jamais dans l'historique.
+      - name: Générer la configuration
+        env:
+          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
+        run: |
+          if [ -z "$TMDB_API_KEY" ]; then
+            echo "Le secret TMDB_API_KEY n'est pas défini sur le dépôt." >&2
+            echo "Settings -> Secrets and variables -> Actions -> New repository secret" >&2
+            exit 1
+          fi
+          printf 'export const TMDB_API_KEY = "%s";\n' "$TMDB_API_KEY" > js/config.js
+
+      - name: Préparer l'artefact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publier sur GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

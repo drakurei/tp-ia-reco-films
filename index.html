@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CinéScore — Moteur de recommandation</title>
+    <link rel="stylesheet" href="css/main.css" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="header__inner">
+        <a class="header__brand" href="#/">
+          <span class="header__brand-mark">CS</span>
+          <span class="header__brand-name">CinéScore</span>
+        </a>
+
+        <nav class="nav" aria-label="Navigation principale">
+          <a class="nav__link" href="#/" data-route-link="/">Découvrir</a>
+          <a class="nav__link" href="#/favoris" data-route-link="/favoris">Favoris</a>
+          <a class="nav__link" href="#/stats" data-route-link="/stats">Statistiques</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="main" id="app" aria-live="polite">
+      <!-- Les vues sont injectées ici par le routeur -->
+    </main>
+
+    <footer class="footer">
+      <p>
+        Données fournies par
+        <a href="https://www.themoviedb.org/" target="_blank" rel="noopener">TMDB</a>.
+        Ce produit utilise l'API TMDB mais n'est ni approuvé ni certifié par TMDB.
+      </p>
+    </footer>
+
+    <script type="module" src="js/main.js"></script>
+  </body>
+</html>

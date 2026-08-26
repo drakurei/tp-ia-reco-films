@@ -1,0 +1,118 @@
+// Vue détail d'un film.
+
+@use "../abstracts/variables" as v;
+@use "../abstracts/mixins" as m;
+
+.movie-detail {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid v.$color-border;
+  border-radius: v.$radius-lg;
+  background-color: v.$color-surface;
+
+  &__backdrop {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0.18;
+    mask-image: linear-gradient(to bottom, black, transparent 70%);
+  }
+
+  &__main {
+    position: relative;
+    display: grid;
+    gap: v.$space-xl;
+    padding: v.$space-lg;
+
+    @include m.from(v.$breakpoint-md) {
+      grid-template-columns: 240px 1fr;
+      padding: v.$space-xl;
+    }
+  }
+
+  &__poster {
+    max-width: 240px;
+
+    img {
+      width: 100%;
+      border-radius: v.$radius-md;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+    }
+  }
+
+  &__title {
+    font-size: v.$font-size-xl;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+
+    @include m.from(v.$breakpoint-md) {
+      font-size: v.$font-size-xxl;
+    }
+  }
+
+  &__tagline {
+    margin-top: v.$space-xs;
+    color: v.$color-accent;
+    font-style: italic;
+  }
+
+  &__stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    gap: v.$space-md;
+    margin-top: v.$space-lg;
+
+    li {
+      display: flex;
+      flex-direction: column;
+      padding: v.$space-md;
+      border: 1px solid v.$color-border;
+      border-radius: v.$radius-sm;
+      background-color: rgba(0, 0, 0, 0.25);
+    }
+
+    strong {
+      font-size: v.$font-size-lg;
+      font-weight: 700;
+    }
+
+    span {
+      color: v.$color-text-muted;
+      font-size: v.$font-size-sm;
+    }
+  }
+
+  &__section-title {
+    margin-top: v.$space-lg;
+    font-size: v.$font-size-base;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: v.$color-text-muted;
+  }
+
+  &__overview {
+    margin-top: v.$space-sm;
+    max-width: 70ch;
+  }
+
+  &__actions:not(:empty) {
+    margin-top: v.$space-lg;
+  }
+}
+
+.genre-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: v.$space-sm;
+  margin-top: v.$space-lg;
+
+  &__item {
+    padding: v.$space-xs v.$space-md;
+    border: 1px solid v.$color-border;
+    border-radius: 999px;
+    font-size: v.$font-size-sm;
+    color: v.$color-text-muted;
+  }
+}

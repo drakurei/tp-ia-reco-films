@@ -1,0 +1,53 @@
+// Variables globales du projet.
+// Tout ajout de couleur ou d'espacement passe par ici plutôt que par une
+// valeur écrite en dur dans un composant.
+
+// --- Couleurs -------------------------------------------------------------
+
+$color-bg: #0a0b0f;
+$color-surface: #14161d;
+$color-surface-hover: #1c1f28;
+$color-border: rgba(255, 255, 255, 0.08);
+
+$color-text: #e8e9ee;
+$color-text-muted: #9096a6;
+
+$color-accent: #f0b429;
+$color-accent-dark: #c8940f;
+$color-danger: #f2635f;
+
+// --- Typographie ----------------------------------------------------------
+
+$font-base: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial,
+  sans-serif;
+
+$font-size-sm: 0.8125rem;
+$font-size-base: 1rem;
+$font-size-lg: 1.25rem;
+$font-size-xl: 1.75rem;
+$font-size-xxl: 2.5rem;
+
+// --- Espacements ----------------------------------------------------------
+
+$space-xs: 0.25rem;
+$space-sm: 0.5rem;
+$space-md: 1rem;
+$space-lg: 1.5rem;
+$space-xl: 2.5rem;
+$space-xxl: 4rem;
+
+// --- Divers ---------------------------------------------------------------
+
+$radius-sm: 6px;
+$radius-md: 12px;
+$radius-lg: 20px;
+
+$container-width: 1200px;
+
+$transition: 180ms ease;
+
+// --- Points de rupture ----------------------------------------------------
+
+$breakpoint-sm: 480px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
